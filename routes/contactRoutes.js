@@ -13,25 +13,25 @@ router.post("/", async (req, res) => {
     //SEND email
     const emailSent = await sendEmail(name, email, message);
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Message Sent Successfully",
       contact,
     });
 
     if (!emailSent) {
-      res.status(500).json({
+      return res.status(500).json({
         success: false,
         message: "Email Failed To Send",
       });
     }
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Message sent successfully",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
