@@ -19,6 +19,7 @@ const sendEmail = async (name, email, message) => {
         <p>${message}</p>
       `,
     });
+    console.log("RESEND RESPONSE:", response);
 
     return true;
   } catch (error) {
