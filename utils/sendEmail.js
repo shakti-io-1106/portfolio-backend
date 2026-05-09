@@ -1,64 +1,29 @@
-// const sgMail = require("@sendgrid/mail");
+const { Resend } = require("resend");
 
-// sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-
-// const sendEmail = async (name, email, message) => {
-//   try {
-//     const msg = {
-//       to: process.env.EMAIL_FROM,
-//       from: process.env.EMAIL_FROM,
-//       subject: `New Portfolio Message from ${name}`,
-//       text: `
-//         Name: ${name}
-//         Email: ${email}
-//         Message: ${message}
-//       `,
-//     };
-
-//     await sgMail.send(msg);
-
-//     return true;
-//   } catch (error) {
-//     console.log("SendGrid Error:", error.response?.body || error);
-//     return false;
-//   }
-// };
-
-// module.exports = sendEmail;
-
-const nodemailer = require("nodemailer");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const sendEmail = async (name, email, message) => {
   try {
-    const transporter = nodemailer.createTransport({
-      host: "smtp.gmail.com",
-      port: 465,
-      secure: true,
-      family: 4,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-    const mailOptions = {
-      from: email,
-      to: process.env.EMAIL_USER,
-      subject: `New Contact Form Message from ${name}`,
+    await resend.emails.send({
+      from: "Portfolio <onboarding@resend.dev>",
+      to: process.env.ADMIN_EMAIL,
+      subject: `New Portfolio Message from ${name}`,
+      reply_to: email,
+
       html: `
-                <h3>New Message from Portfolio</h3>
-                <p><b>Name:</b> ${name}</p>
-                <p><b>Email:</b> ${email}</p>
-                <p><b>Message:</b> ${message}</p>
-            `,
-    };
-    await transporter.sendMail(mailOptions);
+        <h2>New Portfolio Contact</h2>
+
+        <p><strong>Name:</strong> ${name}</p>
+        <p><strong>Email:</strong> ${email}</p>
+        <p><strong>Message:</strong></p>
+        <p>${message}</p>
+      `,
+    });
 
     return true;
   } catch (error) {
-    console.log("Email Error:", error);
+    console.log("Resend Error:", error);
+
     return false;
   }
 };
