@@ -5,8 +5,8 @@ sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 const sendEmail = async (name, email, message) => {
   try {
     const msg = {
-      to: process.env.EMAIL_FROM,
-      from: process.env.EMAIL_FROM, // must be verified sender
+      to: process.env.ADMIN - EMAIL,
+      from: process.env.EMAIL_FROM,
       subject: `New Portfolio Message from ${name}`,
       text: `
         Name: ${name}
